@@ -1,4 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
+// тк стор используем не в setup, то импортируем его из нашего файла
+import store from '../store'
 import Shop from '../views/Shop.vue'
 
 const routes = [
@@ -7,7 +9,8 @@ const routes = [
         name: 'Shop',
         component: Shop,
         meta: {
-            layout: 'main'
+            layout: 'main',
+            auth: true      // требуется авторизация
         }
     },
     {
@@ -15,7 +18,8 @@ const routes = [
         name: 'Auth',
         component: () => import('../views/Auth.vue'),  // загружаем по требования
         meta: {
-            layout: 'auth'
+            layout: 'auth',
+            auth: false     // можно не писать по дефолту undefined
         }
     },
     {
@@ -41,4 +45,18 @@ const router = createRouter({
     routes
 })
 
+//вызывается перед загрузкой нужной страницы
+router.beforeEach( (to, from, next) => {
+    const requireAuth = to.meta.auth    //если нужна аторизация
+
+    //если требуем авторизацию и она есть
+    if( requireAuth && store.getters['auth/isAuthenticated']) {
+        next() // переходим на новую страницу
+    } else if (requireAuth && !store.getters['auth/isAuthenticated']){
+        next('/auth?message=auth')  // перходим на страницу логина
+    } else {
+        next()
+    }
+
+})
 export default router
