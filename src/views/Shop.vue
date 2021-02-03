@@ -1,6 +1,6 @@
 <template>
   <div>
-    Homen
+    <h1 class="card">Store</h1>
   </div>
 </template>
 

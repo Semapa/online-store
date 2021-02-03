@@ -4,7 +4,10 @@
 
     <ul class="navbar-menu">
       <li>
-        <router-link to="/">Главная</router-link>
+        <router-link to="/">Магазин</router-link>
+      </li>
+      <li>
+        <router-link to="/cart">Корзина</router-link>
       </li>
     </ul>
   </nav>
