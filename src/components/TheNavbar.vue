@@ -9,9 +9,9 @@
       <li>
         <router-link to="/cart">Корзина</router-link>
       </li>
-      <li>
-        <a href="#" @click.prevent="logout">Выход</a>
-      </li>
+<!--      <li>-->
+<!--        <a href="#" @click.prevent="logout">Выход</a>-->
+<!--      </li>-->
     </ul>
   </nav>
 </template>
