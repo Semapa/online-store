@@ -7,14 +7,12 @@ export default {
     namespace: true,
     state() {
 
-
         return {
             products: []
-
         }
     },
     getters:{
-      getProducts(state){
+        getProducts(state){
           console.log('getProducts')
           return state.products
       }
@@ -28,7 +26,7 @@ export default {
         }
     },
     actions: {
-        async loadProducts({commit}){
+        async loadProductsFromServer({commit}){
             const response = await axios.get('/products')
             response.data.map((product) => {
                 commit('addProduct', product)

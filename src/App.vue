@@ -16,8 +16,9 @@ export default {
     const store = useStore()
 
     onMounted(() => {
-      store.dispatch('loadProducts')
+      store.dispatch('loadProductsFromServer')
     })
+
     return {
       layout: computed( () => route.meta.layout)
     }
