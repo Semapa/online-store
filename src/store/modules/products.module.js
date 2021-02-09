@@ -4,7 +4,7 @@ import axios from '../../axios/product'
 // const store = useStore()
 
 export default {
-    namespace: true,
+    namespaced: true,
     state() {
 
         return {
@@ -18,16 +18,38 @@ export default {
       }
     },
     mutations: {
-        setProduct(state, product) {
-            state.products = product
+        setProduct(state) {
+            console.log('setProduct')
+            state.products = []
         },
         addProduct(state, product) {
             state.products.push(product)
-        }
+        },
+        sortProducts(state){
+            console.log('sortProducts - products',state.products)
+            state.products.sort((a, b) => {
+            console.log('showStore',a.value.count, b.value.count)
+            if (a.count > b.count) return -1
+            if (a.count < b.count) return 1
+            return 0
+            })
+        },
+        // findProducts(state){
+        //
+        // }
     },
     actions: {
+        /* axios.get('/products?id=4')
+         * или
+         * axios.get('/user', {
+         * params: {
+         *      ID: 12345
+         *      }
+         *  })
+         */
         async loadProductsFromServer({commit}){
-            const response = await axios.get('/products')
+            const url = `/products`
+            const response = await axios.get(url)
             response.data.map((product) => {
                 commit('addProduct', product)
             })

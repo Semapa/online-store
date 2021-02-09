@@ -1,21 +1,23 @@
-import {ref} from 'vue'
+import {ref, onMounted, watch} from 'vue'
 import {useStore} from 'vuex'
 
 export function useShop(){
     const store = useStore()
-    const products = ref(store.getters.getProducts)
+    const products = ref(store.getters['products/getProducts'])
+    const filter = ref('')
 
-    function sortProducts(){
-        console.log('showStore - products',products.value)
-        products.value.sort((a, b) => {
-            console.log('showStore',a.count, b.count)
-            if (a.count > b.count) return -1
-            if (a.count < b.count) return 1
-            return 0
-        })
-    }
+    onMounted(() => {
+        store.dispatch('products/loadProductsFromServer')
+        // store.commit('sortProducts')
+    })
+
+    watch(filter, val => {
+        console.log('val', val.products)
+        console.log('store.products', products.value)
+    })
+
     return {
         products,
-        sortProducts
+        filter
     }
 }

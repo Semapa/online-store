@@ -2,30 +2,7 @@
   <div class="card">
     <h1>Корзина</h1>
     <h3 class="text-center" v-if="!products.length">В корзине пока ничего нет</h3>
-    <!--      <CartItem></CartItem>-->
-    <table class="table" v-else>
-      <thead>
-      <tr>
-        <th>Наименование</th>
-        <th>Количество</th>
-        <th>Цена (шт)</th>
-      </tr>
-      </thead>
-      <tbody >
-      <tr v-for="(product, idx) in products" :key="product.id" >
-        <template v-if="product.count>0">
-        <td>{{product.title}}</td>
-        <td>
-          <button class="btn primary" @click="addAmountProduct(idx)">+</button>
-          {{product.count}} шт.
-          <button class="btn danger" @click="reduceAmountProduct(idx)">-</button>
-        </td>
-        <td>{{ currency(product.price)}}</td>
-        </template>
-      </tr>
-
-      </tbody>
-    </table>
+      <CartItem :products="products" v-else/>
     <hr>
     <p class="text-right"><strong>Всего: {{currency(getTotal)}}</strong></p>
     <p class="text-right">
@@ -36,10 +13,17 @@
 
 <script>
 import {useCart} from '@/use/cart'
+import CartItem from '@/components/cart/CartItem'
+import {currency} from '@/utils/currency'
 
 export default {
+
+  components: {CartItem},
   setup() {
-    return {...useCart()}
+
+    return {...useCart(),
+      currency
+    }
   }
 }
 </script>

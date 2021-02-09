@@ -4,20 +4,17 @@
 </template>
 
 <script>
-import {computed, onMounted} from 'vue'
+import {computed} from 'vue'
 import {useRoute} from 'vue-router'
 import MainLayout from "@/layout/MainLayout"
 import AuthLayout from "@/layout/AuthLayout"
-import {useStore} from 'vuex'
+
 
 export default {
   setup() {
     const route = useRoute()
-    const store = useStore()
 
-    onMounted(() => {
-      store.dispatch('loadProductsFromServer')
-    })
+
 
     return {
       layout: computed( () => route.meta.layout)

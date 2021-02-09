@@ -1,6 +1,6 @@
 import {ref, computed} from 'vue'
 import {useStore} from 'vuex'
-import {currency} from '@/utils/currency'
+
 
 // const CART_MODEL = {
 //   '2': 3,
@@ -12,14 +12,16 @@ import {currency} from '@/utils/currency'
 
 export function useCart(){
     const store = useStore()
-    const amount = ref(1)
-    const products = ref(store.getters.getProducts)
+
+    const products = ref(store.getters['productsCart/getProductsCart'])
     // const total = getTotal
 
 
     function addAmountProduct(idx) {
-        products.value[idx].count++
+        console.log(products.value, idx)
+        // products.value[idx].count++
         // console.log(products.value[idx])
+
     }
 
     function reduceAmountProduct(idx) {
@@ -43,8 +45,6 @@ export function useCart(){
     }
 
     return {
-        amount,
-        currency,
         addAmountProduct,
         reduceAmountProduct,
         products: products,
