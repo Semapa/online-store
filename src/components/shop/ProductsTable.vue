@@ -8,9 +8,9 @@
     <div class="text-center">
       <button v-if="!isProductControls[product.id]" class="btn" :data-id="product.id" :data-count="product.count" >{{product.count}}</button>
         <div v-else class="product-controls">
-          <AppButton :class="'danger'" :text="'-'" @action="reduceAmountProduct(idx)"/>
+          <AppButton :class="'danger'" @action="reduceAmountProduct(idx)">-</AppButton>
           <strong>{{product.count}}</strong>
-          <AppButton :class="'primary'" :text="'+'" @action="addAmountProduct(idx)"/>
+          <AppButton :class="'primary'" @action="addAmountProduct(idx)">+</AppButton>
         </div>
     </div>
   </div>
@@ -29,17 +29,17 @@ export default {
       required: true,
     }
   },
-  setup() {
+  setup(props) {
     const store = useStore()
     let isProductControls = ref([])
 
     function showCount(e) {
-      console.log('e', e.target.dataset)
+      console.log('showCount', props.products[0])
       if(e.target.dataset.count > 0 && isProductControls.value[e.target.dataset.id] === true){
         return isProductControls
       }
       isProductControls.value[e.target.dataset.id] = e.target.dataset.count >0 ? true : false
-      store.commit('productsCart/addProductCart', e.target.dataset.id)
+      // store.commit('productsCart/addProductCart', props.products[])
       console.log('isProductControls', store)
       console.log('productsCart', store.getters['productsCart/getProductsCart'])
       return isProductControls

@@ -12,9 +12,11 @@
       <template v-if="product.count>0">
         <td>{{product.title}}</td>
         <td>
-          <AppButton :class="'primary'" :text="'+'" @action="addAmountProduct(idx)"/>
+          //как альтернативный вариант
+<!--          <AppButton :class="'primary'" :text="'+'" @action="addAmountProduct(idx)"/>-->
+          <AppButton :class="'primary'" @action="addAmountProduct(idx)">+</AppButton>
           {{product.count}} шт.
-          <AppButton :class="'danger'" :text="'-'" @action="reduceAmountProduct(idx)"/>
+          <AppButton :class="'danger'" @action="reduceAmountProduct(idx)">-</AppButton>
         </td>
         <td>{{ currency(product.price)}}</td>
       </template>
