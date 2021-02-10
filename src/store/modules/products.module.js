@@ -8,14 +8,17 @@ export default {
     state() {
 
         return {
-            products: []
+            products: [],
+            categories: []
         }
     },
     getters:{
         getProducts(state){
-          console.log('getProducts')
           return state.products
-      }
+      },
+        getCategories(state){
+            return state.categories
+        }
     },
     mutations: {
         setProduct(state) {
@@ -24,6 +27,9 @@ export default {
         },
         addProduct(state, product) {
             state.products.push(product)
+        },
+        addCategories(state,categories){
+            state.categories.push(categories)
         },
         sortProducts(state){
             console.log('sortProducts - products',state.products)
@@ -53,7 +59,7 @@ export default {
             response.data.map((product) => {
                 commit('addProduct', product)
             })
-        }
+        },
         // async create({commit, dispatch}, payload) {
         //     try {
         //         const {data} = await axios.post('/products', payload)
@@ -64,5 +70,13 @@ export default {
         //         })
         //     }
         // }
-    }
+        async loadCategoriesFromServer({commit}){
+            const url = `/categories`
+            const response = await axios.get(url)
+            response.data.map((categories) => {
+                commit('addCategories', categories)
+            })
+        }
+    },
+
 }

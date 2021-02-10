@@ -1,14 +1,17 @@
 <template>
   <div class="products-filter">
     <div class="form-control">
-      <input type="text" placeholder="Найти товар..." v-model="products">
+      <input type="text" placeholder="Найти товар..." v-model="filterValue">
       <span class="form-control-clear">&times;</span>
     </div>
 
     <ul class="list">
       <li class="list-item" >Все</li>
-      <li class="list-item">
-        Название категории
+      <li class="list-item"
+          v-for="category in categories"
+          :key="category.id"
+      >
+        {{ category.title }}
       </li>
     </ul>
   </div>
@@ -18,17 +21,24 @@
 import {ref, watch} from 'vue'
 export default {
   emits: ['update:modelValue'],
-  props: ['modeValue'],
+  // props: ['modelValue'],
+  props: {
+    categories: {
+      type: Object,
+      required: true,
+    },
+    modeValue:{}
+  },
   setup(_, {emit}) {
-    const products = ref()
+    const filterValue = ref()
 
-    watch([products], values => {
+    watch([filterValue], values => {
       emit('update:modelValue', {
-        products: values[0]
+        filterValue: values[0]
       })
     })
     return {
-      products
+      filterValue
     }
   }
 }

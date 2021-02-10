@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <ProductsFilter v-model="filter"/>
+    <ProductsFilter :categories="categories" v-model="filter"/>
     <ProductsTable :products="products"/>
   </div>
 </template>

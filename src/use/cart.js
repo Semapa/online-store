@@ -25,11 +25,10 @@ export function useCart(){
     }
 
     function getTotal() {
-        let count = 0
-        products.value.map((item) => {
-            count += item.price * item.count
-        })
-        return count
+        const amount = products.value.reduce((total, product) => {
+            return total = product.price * product.count
+        }, 0)
+        return amount
     }
 
     function toPay(){

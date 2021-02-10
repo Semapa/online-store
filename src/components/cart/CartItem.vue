@@ -8,15 +8,15 @@
     </tr>
     </thead>
     <tbody >
-    <tr v-for="(product, idx) in products" :key="product.id" >
+    <tr v-for="(product) in products" :key="product.id" >
       <template v-if="product.count>0">
         <td>{{product.title}}</td>
         <td>
-          //как альтернативный вариант
+<!--          как альтернативный вариант-->
 <!--          <AppButton :class="'primary'" :text="'+'" @action="addAmountProduct(idx)"/>-->
-          <AppButton :class="'primary'" @action="addAmountProduct(idx)">+</AppButton>
+          <AppButton :class="'primary'" @action="addAmountProduct(product.id)">+</AppButton>
           {{product.count}} шт.
-          <AppButton :class="'danger'" @action="reduceAmountProduct(idx)">-</AppButton>
+          <AppButton :class="'danger'" @action="reduceAmountProduct(product.id)">-</AppButton>
         </td>
         <td>{{ currency(product.price)}}</td>
       </template>
