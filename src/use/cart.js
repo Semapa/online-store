@@ -16,17 +16,12 @@ export function useCart(){
     const products = ref(store.getters['productsCart/getProductsCart'])
     // const total = getTotal
 
-
-    function addAmountProduct(idx) {
-        console.log(products.value, idx)
-        // products.value[idx].count++
-        // console.log(products.value[idx])
-
+    function addAmountProduct(id) {
+        store.commit('productsCart/addAmountProduct', {id:id})
     }
 
-    function reduceAmountProduct(idx) {
-        if (products.value[idx].count > 0)
-            products.value[idx].count--
+    function reduceAmountProduct(id) {
+        store.commit('productsCart/reduceAmountProduct', {id:id})
     }
 
     function getTotal() {

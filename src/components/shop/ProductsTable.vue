@@ -1,16 +1,25 @@
 <template>
   <div class="products-table">
-  <div class="product-card" v-for="(product, idx) in products" :key="product.id"  @click="showCount">
+  <div class="product-card" v-for="(product, idx) in products"
+       :key="product.id"
+       @click="showControl"
+  >
     <div class="product-img">
       <img :src=product.img>
     </div>
     <h4 class="product-title">{{product.title}}</h4>
     <div class="text-center">
-      <button v-if="!isProductControls[product.id]" class="btn" :data-id="product.id" :data-count="product.count" >{{product.count}}</button>
+      <button v-if="!isShowControl[product.id]" class="btn"
+              :data-id="product.id"
+              :data-count="product.count"
+              :data-index="idx"
+      >
+        {{product.count}}
+      </button>
         <div v-else class="product-controls">
-          <AppButton :class="'danger'" @action="reduceAmountProduct(idx)">-</AppButton>
+          <AppButton :class="'danger'" @action="reduceAmountProduct(product.id)">-</AppButton>
           <strong>{{product.count}}</strong>
-          <AppButton :class="'primary'" @action="addAmountProduct(idx)">+</AppButton>
+          <AppButton :class="'primary'" @action="addAmountProduct(product.id)">+</AppButton>
         </div>
     </div>
   </div>
@@ -31,23 +40,23 @@ export default {
   },
   setup(props) {
     const store = useStore()
-    let isProductControls = ref([])
+    let isShowControl = ref([])
 
-    function showCount(e) {
-      console.log('showCount', props.products[0])
-      if(e.target.dataset.count > 0 && isProductControls.value[e.target.dataset.id] === true){
-        return isProductControls
+    function showControl(e) {
+      isShowControl.value[e.target.dataset.id] = e.target.dataset.count >0 ? true : false
+
+      if(isShowControl.value[e.target.dataset.id] === true){
+          let currentProduct = props.products[e.target.dataset.index]
+          console.log('currentProduct',currentProduct)
+          currentProduct.count = 1
+          store.commit('productsCart/addProductCart', currentProduct)
       }
-      isProductControls.value[e.target.dataset.id] = e.target.dataset.count >0 ? true : false
-      // store.commit('productsCart/addProductCart', props.products[])
-      console.log('isProductControls', store)
-      console.log('productsCart', store.getters['productsCart/getProductsCart'])
-      return isProductControls
+//      return isShowControl
     }
 
     return {
-      isProductControls,
-      showCount,
+      isShowControl,
+      showControl,
       ...useCart()
     }
   },
