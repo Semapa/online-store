@@ -2,14 +2,19 @@
   <div class="products-filter">
     <div class="form-control">
       <input type="text" placeholder="Найти товар..." v-model="filterValue">
-      <span class="form-control-clear">&times;</span>
+      <span class="form-control-clear" @click="changeProductName">&times;</span>
     </div>
 
     <ul class="list">
-      <li class="list-item" >Все</li>
       <li class="list-item"
-          v-for="category in categories"
-          :key="category.id"
+          @click="changeCategory('')"
+      >
+        Все
+      </li>
+      <li class="list-item"
+          v-for="(category, idx) in categories"
+          :key="idx"
+          @click="changeCategory(category.type)"
       >
         {{ category.title }}
       </li>
@@ -20,7 +25,7 @@
 <script>
 import {ref, watch} from 'vue'
 export default {
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue','change-category','change-product'],
   // props: ['modelValue'],
   props: {
     categories: {
@@ -37,8 +42,18 @@ export default {
         filterValue: values[0]
       })
     })
+
+    function changeCategory(cat){
+      emit('change-category', cat)
+    }
+    function changeProductName(){
+      filterValue.value = ''
+      emit('change-product')
+    }
     return {
-      filterValue
+      filterValue,
+      changeCategory,
+      changeProductName
     }
   }
 }

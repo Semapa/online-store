@@ -18,7 +18,7 @@ export default {
       },
         getCategories(state){
             return state.categories
-        }
+        },
     },
     mutations: {
         setProduct(state) {
@@ -34,9 +34,10 @@ export default {
         sortProducts(state){
             console.log('sortProducts - products',state.products)
             state.products.sort((a, b) => {
-            console.log('showStore',a.value.count, b.value.count)
+            console.log('sortProducts',a.value.count, b.value.count)
             if (a.count > b.count) return -1
             if (a.count < b.count) return 1
+                //    return state.allProducts.sort((a, b) => b.count - a.count)
             return 0
             })
         },
@@ -55,7 +56,10 @@ export default {
          */
         async loadProductsFromServer({commit}){
             const url = `/products`
-            const response = await axios.get(url)
+            const response = await axios.get(url, {
+
+            })
+
             response.data.map((product) => {
                 commit('addProduct', product)
             })
