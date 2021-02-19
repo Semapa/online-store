@@ -13,11 +13,27 @@ if(process.env.NODE_ENV === 'development') {
 
 export default createStore({
     plugins,
-    state: {
+    state() {
+        return {
+            message: null
+        }
     },
     mutations: {
+        setMessage(state, message) {
+            state.message = message
+        },
+        clearMessage(state) {
+            state.message = null
+        }
     },
     actions: {
+        // чтобы закрывалось окно с сообщением через 5 сек
+        setMessage({commit}, message) {
+            commit('setMessage', message)
+            setTimeout(() => {
+                commit('clearMessage')
+            }, 5000)
+        }
     },
     modules: {
         auth,

@@ -1,4 +1,7 @@
+import axios from 'axios'
+import {error} from '@/utils/error'
 const TOKEN_KEY = 'jwt-token'
+
 export default {
     //чтобы название экшенов были локальные
     namespaced: true,
@@ -19,9 +22,21 @@ export default {
         }
     },
     actions: {
-        async login({ commit }, payload) {
-            console.log(payload)
-            commit('setToken', 'TEST TOKEN')
+        async login({commit, dispatch}, payload) {
+            try {
+                const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.VUE_APP_FB_KEY}`
+                const {data} = await axios.post(url, {...payload, returnSecureToken: true})
+                commit('setToken', data.idToken)
+                // чистим форму логина
+                commit('clearMessage', null, {root:true})
+            } catch (e){
+                // записываем ошибку в стор чтобы показать ее в окне
+                dispatch('setMessage', {
+                    value: error(e.response.data.error.message),
+                    type: 'danger'
+                }, {root:true}) // этот параметр нужен чтобы вызывлся экшен из глобального стора, а не из этого файла
+                throw new Error()
+            }
         }
     },
     getters: {

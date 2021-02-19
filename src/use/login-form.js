@@ -39,9 +39,12 @@ export function useLoginForm() {
         }
     })
     const onSubmit = handleSubmit( async values => {
-        console.log('Form', values)
-        await store.dispatch('auth/login', values)
-        router.push('/')
+        // оборачиваем в try чтобы не было редиректа в случае не правильного логина
+        try {
+            await store.dispatch('auth/login', values)
+            router.push('/')
+        }catch(e){
+        }
     })
 
 

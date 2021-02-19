@@ -1,36 +1,38 @@
 <template>
   <div class="products-table">
-  <div class="product-card" v-for="(product, idx) in products"
-       :key="product.id"
-       @click="showControl"
-  >
-    <div class="product-img">
-      <img :src=product.img>
+    <div class="product-card" v-for="(product, idx) in products"
+         :key="product.id"
+         @click="openProduct(product.id)"
+    >
+      <div class="product-img">
+        <img :src=product.img>
+      </div>
+      <h4 class="product-title">{{product.title}}</h4>
+      <div class="text-center" @click.stop="showControl">
+        <button v-if="!isShowControl[product.id]" class="btn"
+                :data-id="product.id"
+                :data-count="product.count"
+                :data-index="idx"
+        >
+          {{product.count}}
+        </button>
+        <AppProductControl
+            v-else
+            :count="countProductCart"
+            :productId="product.id"
+        />
+      </div>
     </div>
-    <h4 class="product-title">{{product.title}}</h4>
-    <div class="text-center">
-      <button v-if="!isShowControl[product.id]" class="btn"
-              :data-id="product.id"
-              :data-count="product.count"
-              :data-index="idx"
-      >
-        {{product.count}}
-      </button>
-        <div v-else class="product-controls">
-          <AppButton :class="'danger'" @action="reduceAmountProduct(product.id)">-</AppButton>
-          <strong>{{product.count}}</strong>
-          <AppButton :class="'primary'" @action="addAmountProduct(product.id)">+</AppButton>
-        </div>
-    </div>
-  </div>
   </div>
 </template>
 
 <script>
 import {ref} from 'vue'
 import {useStore} from 'vuex'
-import {useCart} from '@/use/cart'
-import AppButton from '@/components/ui/AppButton'
+import {useRouter} from 'vue-router'
+
+
+import AppProductControl from '@/components/ui/AppProductControl'
 export default {
   props: {
     products: {
@@ -40,6 +42,7 @@ export default {
   },
   setup(props) {
     const store = useStore()
+    const router = useRouter()
     let isShowControl = ref([])
 
     function showControl(e) {
@@ -53,13 +56,24 @@ export default {
       }
 //      return isShowControl
     }
+    function countProductCart(){
+      const count = store.getters.getProductsCart
+      console.log('count', count)
+      return count
+    }
+
+    function openProduct(id){
+      router.push(`/product/${id}`)
+    }
 
     return {
       isShowControl,
       showControl,
-      ...useCart()
+      openProduct,
+      countProductCart
+
     }
   },
-  components: {AppButton}
+  components: {AppProductControl}
 }
 </script>
