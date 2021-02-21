@@ -7,7 +7,11 @@ export default {
     namespaced: true,
     state() {
         return {
-            token: localStorage.getItem(TOKEN_KEY)
+            token: localStorage.getItem(TOKEN_KEY),
+            user: {
+                id: null,
+                role: null
+            }
         }
     },
     mutations: {
@@ -19,6 +23,12 @@ export default {
             state.token = null
             localStorage.removeItem(TOKEN_KEY)
 
+        },
+        setUserId(state, id) {
+            state.user.id = id
+        },
+        setUserRole(state, role) {
+            state.user.role = role
         }
     },
     actions: {
@@ -27,8 +37,10 @@ export default {
                 const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.VUE_APP_FB_KEY}`
                 const {data} = await axios.post(url, {...payload, returnSecureToken: true})
                 commit('setToken', data.idToken)
+                commit('setUserId', data.localId)
                 // чистим форму логина
                 commit('clearMessage', null, {root:true})
+                dispatch('getRole')
             } catch (e){
                 // записываем ошибку в стор чтобы показать ее в окне
                 dispatch('setMessage', {
@@ -36,6 +48,22 @@ export default {
                     type: 'danger'
                 }, {root:true}) // этот параметр нужен чтобы вызывлся экшен из глобального стора, а не из этого файла
                 throw new Error()
+            }
+        },
+        async getRole({state,commit}) {
+            try {
+                const url = 'https://vue-store-b9903-default-rtdb.europe-west1.firebasedatabase.app/.json'
+                const {data} = await axios.get(url, {})
+                const id = () => {
+                    for (let key in data.roles) {
+                        if(key === state.user.id)
+                           return data.roles[key]
+                    }
+                }
+                commit('setUserRole', id())
+                console.log('user', state.user)
+            } catch (e){
+                console.log(e)
             }
         }
     },
