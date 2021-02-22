@@ -10,7 +10,7 @@ const routes = [
         component: Shop,
         meta: {
             layout: 'main',
-            auth: true      // требуется авторизация
+            auth: false      // требуется авторизация
         }
     },
     {
@@ -20,6 +20,16 @@ const routes = [
         meta: {
             layout: 'auth',
             auth: false     // можно не писать по дефолту undefined
+        }
+    },
+    {
+        path: '/admin',
+        name: 'Admin',
+        component: () => import('../views/Admin/Admin.vue'),  // загружаем по требования
+        meta: {
+            layout: 'admin',
+            auth: true,     // можно не писать по дефолту undefined
+            admin: true
         }
     },
     {

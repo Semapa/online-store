@@ -9,16 +9,20 @@
       <li>
         <router-link to="/cart">Корзина</router-link>
       </li>
-<!--      <li>-->
-<!--        <a href="#" @click.prevent="logout">Выход</a>-->
-<!--      </li>-->
+      <li v-if="!isAuthenticated">
+        <router-link to="/auth">Войти</router-link>
+      </li>
+      <li v-if="isAuthenticated">
+        <a href="#" @click.prevent="logout">Выход</a>
+      </li>
     </ul>
   </nav>
 </template>
 
 <script>
-import {useStore} from "vuex"
-import {useRouter} from "vue-router"
+import {computed} from 'vue'
+import {useStore} from 'vuex'
+import {useRouter} from'vue-router'
 
 export default {
   setup() {
@@ -28,8 +32,9 @@ export default {
     return {
       logout: () => {
         store.commit('auth/logout')
-        router.push('/auth')
-      }
+        router.push('/')
+      },
+      isAuthenticated: computed(() => store.getters['auth/isAuthenticated'])
     }
   }
 }

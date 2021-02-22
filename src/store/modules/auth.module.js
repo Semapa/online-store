@@ -54,13 +54,13 @@ export default {
             try {
                 const url = 'https://vue-store-b9903-default-rtdb.europe-west1.firebasedatabase.app/.json'
                 const {data} = await axios.get(url, {})
-                const id = () => {
+                const role = () => {
                     for (let key in data.roles) {
                         if(key === state.user.id)
                            return data.roles[key]
                     }
                 }
-                commit('setUserRole', id())
+                commit('setUserRole', role())
                 console.log('user', state.user)
             } catch (e){
                 console.log(e)
