@@ -1,17 +1,35 @@
+import {reactive} from 'vue'
 import axios from 'axios'
 import {error} from '@/utils/error'
 const TOKEN_KEY = 'jwt-token'
+const USER_ID = 'user-id'
+const USER_ROLE = 'user-role'
 
 export default {
+
     //чтобы название экшенов были локальные
     namespaced: true,
     state() {
         return {
             token: localStorage.getItem(TOKEN_KEY),
-            user: {
-                id: null,
-                role: null
-            }
+            user: reactive({
+                id: localStorage.getItem(USER_ID),
+                role: localStorage.getItem(USER_ROLE)
+            })
+        }
+    },
+    getters: {
+        token(state) {
+            return state.token
+        },
+        isAuthenticated(_, getters ) {  // _ - не используем первый параметр state
+            // !! приводит токен к булеан значению
+            // если null, первый !делает true, второй ! false
+            // если в токене строка, то !false, второй !true
+            return !!getters.token  // получаем token с помощью геттера
+        },
+        getRole(state){
+            return state.user.role
         }
     },
     mutations: {
@@ -21,14 +39,19 @@ export default {
         },
         logout(state) {
             state.token = null
+            state.user.id = null
+            state.user.role = null
             localStorage.removeItem(TOKEN_KEY)
-
+            localStorage.removeItem(USER_ID)
+            localStorage.removeItem(USER_ROLE)
         },
         setUserId(state, id) {
             state.user.id = id
+            localStorage.setItem(USER_ID, id)
         },
         setUserRole(state, role) {
             state.user.role = role
+            localStorage.setItem(USER_ROLE, role)
         }
     },
     actions: {
@@ -67,15 +90,5 @@ export default {
             }
         }
     },
-    getters: {
-        token(state) {
-            return state.token
-        },
-        isAuthenticated(_, getters ) {  // _ - не используем первый параметр state
-            // !! приводит токен к булеан значению
-            // если null, первый !делает true, второй ! false
-            // если в токене строка, то !false, второй !true
-            return !!getters.token  // получаем token с помощью геттера
-        }
-    }
+
 }

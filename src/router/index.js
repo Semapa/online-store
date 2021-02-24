@@ -29,7 +29,24 @@ const routes = [
         meta: {
             layout: 'admin',
             auth: true,     // можно не писать по дефолту undefined
-            admin: true
+        }
+    },
+    {
+        path: '/admin/products',
+        name: 'AdminProducts',
+        component: () => import('../views/Admin/AdminProducts.vue'),  // загружаем по требования
+        meta: {
+            layout: 'admin',
+            auth: true,     // можно не писать по дефолту undefined
+        }
+    },
+    {
+        path: '/admin/categories',
+        name: 'AdminCategories',
+        component: () => import('../views/Admin/AdminCategories.vue'),  // загружаем по требования
+        meta: {
+            layout: 'admin',
+            auth: true,     // можно не писать по дефолту undefined
         }
     },
     {

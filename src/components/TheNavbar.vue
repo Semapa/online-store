@@ -1,11 +1,18 @@
 <template>
   <nav class="navbar">
     <h3>Online store</h3>
-
     <ul class="navbar-menu">
       <li>
         <router-link to="/">Магазин</router-link>
       </li>
+      <template v-if="role === 'admin'">
+        <li>
+          <router-link to="/admin/categories">Категории</router-link>
+        </li>
+        <li>
+          <router-link to="/admin/products">Продукты</router-link>
+        </li>
+      </template>
       <li>
         <router-link to="/cart">Корзина</router-link>
       </li>
@@ -34,7 +41,9 @@ export default {
         store.commit('auth/logout')
         router.push('/')
       },
-      isAuthenticated: computed(() => store.getters['auth/isAuthenticated'])
+      isAuthenticated: computed(() => store.getters['auth/isAuthenticated']),
+      role: computed(() => store.getters['auth/getRole']),
+
     }
   }
 }

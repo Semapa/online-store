@@ -15,7 +15,13 @@ export default createStore({
     plugins,
     state() {
         return {
-            message: null
+            message: null,
+            loader: false
+        }
+    },
+    getters: {
+        getLoader(state){
+            return state.loader
         }
     },
     mutations: {
@@ -24,6 +30,9 @@ export default createStore({
         },
         clearMessage(state) {
             state.message = null
+        },
+        setLoader(state, value) {
+           state.loader = value
         }
     },
     actions: {

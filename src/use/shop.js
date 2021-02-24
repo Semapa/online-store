@@ -23,8 +23,10 @@ export function useShop(){
         }))
 
     onMounted(() => {
-        store.dispatch('products/loadProductsFromServer')
+        store.commit('setLoader', true)
         store.dispatch('products/loadCategoriesFromServer')
+        store.dispatch('products/loadProductsFromServer')
+        store.commit('setLoader', false)
     })
 
     watch(filter, name => {

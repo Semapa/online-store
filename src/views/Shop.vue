@@ -1,30 +1,41 @@
 <template>
-  <div class="card">
-    <ProductsFilter :categories="categories"
+  <div v-if="loading">
+    <loader class="mt"/>
+  </div>
+  <div v-else class="card">
+    <products-filter :categories="categories"
                     v-model="filter"
                     @change-category="changeCategory"
                     @change-product="changeProduct"/>
-    <ProductsTable :products="products"/>
+    <products-table :products="products"/>
   </div>
 </template>
 
 <script>
-
+import {computed} from 'vue'
+import {useStore} from 'vuex'
 import {useShop} from '@/use/shop'
+import Loader from '@/components/TheLoader'
 import ProductsFilter from '@/components/shop/ProductsFilter'
 import ProductsTable from '@/components/shop/ProductsTable'
 
   export default {
-    components:{ProductsFilter, ProductsTable},
+    components:{ProductsFilter, ProductsTable, Loader},
     setup(){
+      const store = useStore()
+      const loading = computed(()=> store.getters.getLoader)
       return {
         ...useShop(),
+        loading
       }
     }
   }
 </script>
 
 <style scoped>
+  .mt {
+    margin-top: 40vh;
+  }
   .card {
     border-radius: 4px;
     padding: 0;
