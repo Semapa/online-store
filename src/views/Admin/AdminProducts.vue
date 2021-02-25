@@ -6,7 +6,7 @@
         <th>
           <div class="card-title">
             <h1 class="card-title">Продукты</h1>
-            <button class="btn primary">Добавить</button>
+            <button class="btn primary" @click="modal = true">Добавить</button>
           </div>
         </th>
       </tr>
@@ -26,13 +26,26 @@
       </tr>
       </tbody>
     </table>
-
+    <teleport to="body">
+      <app-modal v-if="modal" title="Создать новый продукт" @close="modal = false">
+        <modal-products />
+      </app-modal>
+    </teleport>
   </div>
 </template>
 
 <script>
+import {ref} from 'vue'
+import AppModal from '@/components/ui/AppModal'
+import ModalProducts from '@/components/modal/ModalProducts'
 export default {
-name: "AdminProducts"
+  setup() {
+    const modal = ref(false)
+    return {
+      modal
+    }
+  },
+  components: {AppModal, ModalProducts}
 }
 </script>
 

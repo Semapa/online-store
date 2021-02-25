@@ -7,7 +7,7 @@
           <th>
             <div class="card-title">
               <h1 class="card-title">Категории</h1>
-              <button class="btn primary">Добавить</button>
+              <button class="btn primary" @click="modal = true">Добавить</button>
             </div>
           </th>
         </tr>
@@ -28,11 +28,27 @@
       </tbody>
     </table>
   </div>
+  <teleport to="body">
+    <app-modal v-if="modal" title="Создать новую категорию" @close="modal = false">
+      <modal-categories />
+    </app-modal>
+  </teleport>
 </template>
 
 <script>
+import {ref} from 'vue'
+import AppModal from '@/components/ui/AppModal'
+import ModalCategories from '@/components/modal/ModalCategories'
 export default {
-  name: 'AdminCategories'
+  setup() {
+    const modal = ref(false)
+
+    return {
+      modal,
+
+    }
+  },
+  components: {AppModal, ModalCategories}
 }
 </script>
 
