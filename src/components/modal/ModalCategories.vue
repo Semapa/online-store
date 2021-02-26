@@ -1,8 +1,8 @@
 <template>
   <form @submit.prevent="onSubmit">
     <div class="form-control" :class="{invalid: cError}">
-      <label for="category">Название новой категории</label>
-      <input type="text" id="category" v-model="category" @blur="cBlur">
+      <label for="title">Название новой категории</label>
+      <input type="text" id="title" v-model="title" @blur="cBlur">
       <small v-if="cError">{{cError}}</small>
     </div>
     <button class="button btn primary" :disabled="isSubmitting">Создать</button>
@@ -12,19 +12,25 @@
 <script>
 import {useField, useForm} from 'vee-validate'
 import * as yup from 'yup'
+import {useStore} from 'vuex'
 
 export default {
-  setup() {
+  emits: ['created'],
+  setup(_, {emit}) {
+    const store = useStore()
     const {isSubmitting, handleSubmit} = useForm()
 
-    const {value: category, errorMessage: cError, handleBlur: cBlur} = useField(
-        'category',
+    const {value: title, errorMessage: cError, handleBlur: cBlur} = useField(
+        'title',
         yup.string()
           .trim()
           .required('Введите название новой категории')
     )
     const onSubmit =  handleSubmit( async (values)=> {
       console.log('onSubmit', values)
+      await store.dispatch('request/createCategories', values)
+
+      emit('created')
     })
 
     return {
@@ -32,7 +38,7 @@ export default {
       onSubmit,
       cError,
       cBlur,
-      category
+      title
     }
   }
 

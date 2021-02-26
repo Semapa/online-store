@@ -1,4 +1,5 @@
 import axios from '../../axios/product'
+import axiosFirebase from '../../axios/firebaseDB'
 // import {useStore} from "vuex"
 //
 // const store = useStore()
@@ -22,14 +23,19 @@ export default {
     },
     mutations: {
         setProduct(state) {
-            console.log('setProduct')
             state.products = []
+            console.log('setProduct', state.products)
+        },
+        setCategories(state) {
+            state.categories = []
+            console.log('setCategories', state.categories)
         },
         addProduct(state, product) {
             state.products.push(product)
         },
-        addCategories(state,categories){
-            state.categories.push(categories)
+        addCategory(state,category){
+            state.categories.push(category)
+            console.log('addCategories', state.categories)
         },
         sortProducts(state){
             console.log('sortProducts - products',state.products)
@@ -41,9 +47,6 @@ export default {
             return 0
             })
         },
-        // findProducts(state){
-        //
-        // }
     },
     actions: {
         /* axios.get('/products?id=4')
@@ -64,21 +67,25 @@ export default {
                 commit('addProduct', product)
             })
         },
-        // async create({commit, dispatch}, payload) {
-        //     try {
-        //         const {data} = await axios.post('/products', payload)
-        //     } catch (e) {
-        //         dispatch('setMessage', {
-        //             value: e.message,
-        //             type: 'danger'
-        //         })
-        //     }
-        // }
+        // async loadCategoriesJSON({commit}){
+        //     const url = `/categories`
+        //     const response = await axios.get(url)
+        //     response.data.map((categories) => {
+        //         commit('addCategories', categories)
+        //     })
+        // },
         async loadCategoriesFromServer({commit}){
-            const url = `/categories`
-            const response = await axios.get(url)
-            response.data.map((categories) => {
-                commit('addCategories', categories)
+            commit('setCategories')
+            const response = await axiosFirebase.get('/categories.json')
+            console.log('loadCategoriesFromServer', response.data)
+            const categories = Object.keys(response.data).map((key) => {
+                return {
+                    id: key,
+                    title: response.data[key].title
+                }
+            })
+            categories.map((category) => {
+                commit('addCategory', category)
             })
         }
     },

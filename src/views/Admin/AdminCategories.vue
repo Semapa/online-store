@@ -13,38 +13,36 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="item">
-          <td>Овощи</td>
+      <template  v-for="category in categories" :key="category.id">
+        <tr class="item" v-if="categories">
+          <td>{{ category.title }}</td>
           <td>
             <div class="btn danger">Удалить</div>
           </td>
         </tr>
-        <tr class="item">
-          <td>Фрукты</td>
-          <td>
-            <div class="btn danger">Удалить</div>
-          </td>
-        </tr>
+      </template>
       </tbody>
     </table>
   </div>
   <teleport to="body">
     <app-modal v-if="modal" title="Создать новую категорию" @close="modal = false">
-      <modal-categories />
+      <modal-categories @created="modal = false"/>
     </app-modal>
   </teleport>
 </template>
 
 <script>
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
+import {useStore} from 'vuex'
 import AppModal from '@/components/ui/AppModal'
 import ModalCategories from '@/components/modal/ModalCategories'
 export default {
   setup() {
     const modal = ref(false)
-
+    const store = useStore()
     return {
       modal,
+      categories: computed(() => store.getters['products/getCategories'])
 
     }
   },
