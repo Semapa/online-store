@@ -35,7 +35,6 @@ export default {
         },
         addCategory(state,category){
             state.categories.push(category)
-            console.log('addCategories', state.categories)
         },
         sortProducts(state){
             console.log('sortProducts - products',state.products)
@@ -77,7 +76,6 @@ export default {
         async loadCategoriesFromServer({commit}){
             commit('setCategories')
             const response = await axiosFirebase.get('/categories.json')
-            console.log('loadCategoriesFromServer', response.data)
             const categories = Object.keys(response.data).map((key) => {
                 return {
                     id: key,

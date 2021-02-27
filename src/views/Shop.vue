@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading">
-    <loader class="mt"/>
+    <loader />
   </div>
   <div v-else class="card">
     <products-filter :categories="categories"
@@ -33,9 +33,6 @@ import ProductsTable from '@/components/shop/ProductsTable'
 </script>
 
 <style scoped>
-  .mt {
-    margin-top: 40vh;
-  }
   .card {
     border-radius: 4px;
     padding: 0;

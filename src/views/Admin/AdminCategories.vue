@@ -1,6 +1,8 @@
 <template>
-  <div class="card">
-
+  <div v-if="loading">
+    <loader />
+  </div>
+  <div v-else class="card">
     <table class="table">
       <thead>
         <tr>
@@ -17,7 +19,7 @@
         <tr class="item" v-if="categories">
           <td>{{ category.title }}</td>
           <td>
-            <div class="btn danger">Удалить</div>
+            <div class="btn danger" :data-id="category.id" @click="deleteCategory">Удалить</div>
           </td>
         </tr>
       </template>
@@ -26,27 +28,53 @@
   </div>
   <teleport to="body">
     <app-modal v-if="modal" title="Создать новую категорию" @close="modal = false">
-      <modal-categories @created="modal = false"/>
+      <modal-categories @created="createdCategory"/>
     </app-modal>
   </teleport>
 </template>
 
 <script>
-import {ref, computed} from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import {useStore} from 'vuex'
 import AppModal from '@/components/ui/AppModal'
 import ModalCategories from '@/components/modal/ModalCategories'
+import Loader from '@/components/TheLoader'
+
 export default {
   setup() {
     const modal = ref(false)
     const store = useStore()
+    const loading = computed(()=> store.getters.getLoader)
+    const categories = computed(() => store.getters['products/getCategories'])
+
+    onMounted(() => {
+      refreshCategories()
+    })
+
+    function createdCategory() {
+      modal.value = false
+      refreshCategories()
+    }
+
+    function deleteCategory(e) {
+      console.log(e.target.dataset.id)
+    }
+
+    function refreshCategories() {
+      store.commit('setLoader', true)
+      store.dispatch('products/loadCategoriesFromServer')
+      store.commit('setLoader', false)
+    }
     return {
       modal,
-      categories: computed(() => store.getters['products/getCategories'])
+      loading,
+      createdCategory,
+      deleteCategory,
+      categories
 
     }
   },
-  components: {AppModal, ModalCategories}
+  components: {AppModal, ModalCategories, Loader}
 }
 </script>
 

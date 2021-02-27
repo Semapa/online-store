@@ -9,5 +9,7 @@ name: "TheLoader"
 </script>
 
 <style scoped>
-
+.loader {
+  margin-top: 40vh;
+}
 </style>
