@@ -27,7 +27,7 @@ export default {
           .required('Введите название новой категории')
     )
     const onSubmit =  handleSubmit( async (values)=> {
-      await store.dispatch('request/createCategories', values)
+      await store.dispatch('products/createCategory', values)
       emit('created')
     })
 

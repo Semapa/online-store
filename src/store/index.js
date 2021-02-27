@@ -3,7 +3,6 @@ import { createStore } from 'vuex'
 import auth from './modules/auth.module'
 import products from './modules/products.module'
 import productsCart from './modules/productsCart.module'
-import request from './modules/request.module'
 
 const plugins = []
 
@@ -49,6 +48,5 @@ export default createStore({
         auth,
         products,
         productsCart,
-        request
     }
 })

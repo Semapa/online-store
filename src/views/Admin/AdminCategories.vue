@@ -15,13 +15,19 @@
         </tr>
       </thead>
       <tbody>
-      <template  v-for="category in categories" :key="category.id">
-        <tr class="item" v-if="categories">
+      <template v-if="categories.length" v-for="category in categories" :key="category.id">
+        <tr class="item">
           <td>{{ category.title }}</td>
           <td>
-            <div class="btn danger" :data-id="category.id" @click="deleteCategory">Удалить</div>
+            <div class="flex">
+              <div class="btn" :data-id="category.id" @click="modalUpd = true">Изменить</div>
+              <div class="btn danger" :data-id="category.id" @click="deleteCategory">Удалить</div>
+            </div>
           </td>
         </tr>
+      </template>
+      <template v-else>
+        <h3>Создайте новую категорию</h3>
       </template>
       </tbody>
     </table>
@@ -29,6 +35,9 @@
   <teleport to="body">
     <app-modal v-if="modal" title="Создать новую категорию" @close="modal = false">
       <modal-categories @created="createdCategory"/>
+    </app-modal>
+    <app-modal v-if="modalUpd" title="Изменить категорию" @close="modalUpd = false">
+      <modal-upd-categories @updated="updateCategory"/>
     </app-modal>
   </teleport>
 </template>
@@ -38,11 +47,13 @@ import {ref, computed, onMounted} from 'vue'
 import {useStore} from 'vuex'
 import AppModal from '@/components/ui/AppModal'
 import ModalCategories from '@/components/modal/ModalCategories'
+import ModalUpdCategories from '@/components/modal/ModalUpdCategories'
 import Loader from '@/components/TheLoader'
 
 export default {
   setup() {
     const modal = ref(false)
+    const modalUpd = ref(false)
     const store = useStore()
     const loading = computed(()=> store.getters.getLoader)
     const categories = computed(() => store.getters['products/getCategories'])
@@ -58,6 +69,15 @@ export default {
 
     function deleteCategory(e) {
       console.log(e.target.dataset.id)
+      store.commit('setLoader', true)
+      store.dispatch('products/deleteCategoryFromServer', e.target.dataset.id )
+      store.commit('setLoader', false)
+    }
+
+    function updateCategory(e) {
+      store.commit('setLoader', true)
+      store.dispatch('products/updateCategoryFromServer', e.target.dataset.id )
+      store.commit('setLoader', false)
     }
 
     function refreshCategories() {
@@ -67,14 +87,16 @@ export default {
     }
     return {
       modal,
+      modalUpd,
       loading,
       createdCategory,
       deleteCategory,
+      updateCategory,
       categories
 
     }
   },
-  components: {AppModal, ModalCategories, Loader}
+  components: {AppModal, ModalCategories, ModalUpdCategories, Loader}
 }
 </script>
 
@@ -85,5 +107,9 @@ export default {
 }
 .btn {
   font-size: 12px;
+}
+
+.flex{
+  display: flex;
 }
 </style>
