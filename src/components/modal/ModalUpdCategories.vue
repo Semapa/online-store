@@ -12,12 +12,10 @@
 <script>
 import {useField, useForm} from 'vee-validate'
 import * as yup from 'yup'
-import {useStore} from 'vuex'
 
 export default {
   emits: ['updated'],
   setup(_, {emit}) {
-    const store = useStore()
     const {isSubmitting, handleSubmit} = useForm()
 
     const {value: title, errorMessage: cError, handleBlur: cBlur} = useField(
@@ -26,9 +24,8 @@ export default {
             .trim()
             .required('Введите новое название категории')
     )
-    const onSubmit =  handleSubmit( async (values)=> {
-      await store.dispatch('products/createCategory', values)
-      emit('updated')
+    const onSubmit =  handleSubmit(  ()=> {
+      emit('updated', title.value)
     })
 
     return {

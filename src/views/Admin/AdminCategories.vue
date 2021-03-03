@@ -15,12 +15,12 @@
         </tr>
       </thead>
       <tbody>
-      <template v-if="categories.length" v-for="category in categories" :key="category.id">
-        <tr class="item">
+      <template v-if="categories.length" >
+        <tr class="item" v-for="category in categories" :key="category.id">
           <td>{{ category.title }}</td>
           <td>
             <div class="flex">
-              <div class="btn" :data-id="category.id" @click="modalUpd = true">Изменить</div>
+              <div class="btn" :data-id="category.id" @click="changeCategories">Изменить</div>
               <div class="btn danger" :data-id="category.id" @click="deleteCategory">Удалить</div>
             </div>
           </td>
@@ -37,7 +37,8 @@
       <modal-categories @created="createdCategory"/>
     </app-modal>
     <app-modal v-if="modalUpd" title="Изменить категорию" @close="modalUpd = false">
-      <modal-upd-categories @updated="updateCategory"/>
+      <modal-upd-categories
+          @updated="updateCategory"/>
     </app-modal>
   </teleport>
 </template>
@@ -57,6 +58,7 @@ export default {
     const store = useStore()
     const loading = computed(()=> store.getters.getLoader)
     const categories = computed(() => store.getters['products/getCategories'])
+    let currentId = ''
 
     onMounted(() => {
       refreshCategories()
@@ -68,15 +70,23 @@ export default {
     }
 
     function deleteCategory(e) {
-      console.log(e.target.dataset.id)
       store.commit('setLoader', true)
       store.dispatch('products/deleteCategoryFromServer', e.target.dataset.id )
       store.commit('setLoader', false)
     }
 
-    function updateCategory(e) {
+    function changeCategories(e) {
+      currentId = e.target.dataset.id
+      modalUpd.value = true
+    }
+
+    function updateCategory(title) {
+      modalUpd.value = false
       store.commit('setLoader', true)
-      store.dispatch('products/updateCategoryFromServer', e.target.dataset.id )
+      store.dispatch('products/updateCategoryFromServer', {
+        id: currentId,
+        title: title
+      } )
       store.commit('setLoader', false)
     }
 
@@ -91,6 +101,7 @@ export default {
       loading,
       createdCategory,
       deleteCategory,
+      changeCategories,
       updateCategory,
       categories
 
