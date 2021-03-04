@@ -7,7 +7,7 @@ export function useShop(){
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const categories = ref(store.getters['products/getCategories'])
+    const categories = ref(store.getters['categories/getCategories'])
     const filter = ref('')
     const filterValue = reactive({product:'', category:''})
 
@@ -23,10 +23,8 @@ export function useShop(){
         }))
 
     onMounted(() => {
-        store.commit('setLoader', true)
-        store.dispatch('products/loadCategoriesFromServer')
+        store.dispatch('categories/loadCategoriesFromServer')
         store.dispatch('products/loadProductsFromServer')
-        store.commit('setLoader', false)
     })
 
     watch(filter, name => {

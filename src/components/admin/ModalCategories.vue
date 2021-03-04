@@ -28,7 +28,7 @@ export default {
     )
 
     const onSubmit =  handleSubmit( async (values)=> {
-      await store.dispatch('products/createCategory', values)
+      await store.dispatch('categories/createCategory', values)
       emit('created')
     })
 

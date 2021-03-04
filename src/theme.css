@@ -604,6 +604,7 @@ h3 {
     text-align: right;
 }
 
+
 .products-filter {
     padding: 1rem;
     width: 250px;
@@ -615,4 +616,10 @@ h3 {
     flex-wrap: wrap;
     width: 750px;
     padding: 1rem;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

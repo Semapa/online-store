@@ -47,21 +47,24 @@
 import {ref, computed, onMounted} from 'vue'
 import {useStore} from 'vuex'
 import AppModal from '@/components/ui/AppModal'
-import ModalCategories from '@/components/modal/ModalCategories'
-import ModalUpdCategories from '@/components/modal/ModalUpdCategories'
+import ModalCategories from '@/components/admin/ModalCategories'
+import ModalUpdCategories from '@/components/admin/ModalEditCategory'
 import Loader from '@/components/TheLoader'
 
+// Не совсем понятно для чего выносить таблицу с категориями в компонент,
+// если она используется в одном месте
 export default {
   setup() {
     const modal = ref(false)
     const modalUpd = ref(false)
     const store = useStore()
     const loading = computed(()=> store.getters.getLoader)
-    const categories = computed(() => store.getters['products/getCategories'])
+    const categories = computed(() => store.getters['categories/getCategories'])
     let currentId = ''
 
     onMounted(() => {
-      refreshCategories()
+      store.dispatch('categories/loadCategoriesFromServer')
+      store.dispatch('products/loadProductsFromServer')
     })
 
     function createdCategory() {
@@ -70,9 +73,7 @@ export default {
     }
 
     function deleteCategory(e) {
-      store.commit('setLoader', true)
-      store.dispatch('products/deleteCategoryFromServer', e.target.dataset.id )
-      store.commit('setLoader', false)
+      store.dispatch('categories/deleteCategoryFromServer', e.target.dataset.id )
     }
 
     function changeCategories(e) {
@@ -80,20 +81,19 @@ export default {
       modalUpd.value = true
     }
 
-    function updateCategory(title) {
+    async function updateCategory(title) {
       modalUpd.value = false
-      store.commit('setLoader', true)
-      store.dispatch('products/updateCategoryFromServer', {
+      await store.dispatch('categories/updateCategoryFromServer', {
         id: currentId,
         title: title
       } )
-      store.commit('setLoader', false)
+      refreshCategories()
     }
 
+    // Не совсем понял, можно ли обойтись без этой функции
+    // без нее не обновляется страница при создании, удалении и изменении категории
     function refreshCategories() {
-      store.commit('setLoader', true)
-      store.dispatch('products/loadCategoriesFromServer')
-      store.commit('setLoader', false)
+      store.dispatch('categories/loadCategoriesFromServer')
     }
     return {
       modal,
