@@ -83,7 +83,6 @@ export default {
                 store.commit('setLoader', true)
                 const response = await axiosFirebase.get('/products.json')
                 store.commit('setLoader', false)
-                console.log('response.data', response.data)
                 if(response.data) {
                     const products = Object.keys(response.data).map((key) => {
                         return {
@@ -91,7 +90,6 @@ export default {
                             ...response.data[key]
                         }
                     })
-                    console.log('products', products)
                     products.map((product) => {
                         commit('addProduct', product)
                     })

@@ -1,5 +1,8 @@
 <template>
-  <div class="card">
+  <div v-if="loading">
+    <loader />
+  </div>
+  <div v-else class="card">
     <div class="card-title">
       <h1 class="card-title">Продукты</h1>
       <button class="btn primary" @click="modal = true">Добавить</button>
@@ -29,6 +32,7 @@ export default {
     const store = useStore()
     const categories = computed(() => store.getters['categories/getCategories'])
     const products = computed(() => store.getters['products/getProducts'])
+    const loading = computed(()=> store.getters.getLoader)
     const modal = ref(false)
 
     onMounted(() => {
@@ -43,7 +47,8 @@ export default {
       modal,
       categories,
       createProduct,
-      products
+      products,
+      loading
     }
   },
   components: {AppModal, ModalProducts, ProductsTable}

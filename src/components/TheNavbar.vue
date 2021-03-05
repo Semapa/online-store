@@ -15,6 +15,7 @@
       </template>
       <li>
         <router-link to="/cart">Корзина</router-link>
+        <span class="badge warning filled" v-if="countProducts">{{countProducts}}</span>
       </li>
       <li v-if="!isAuthenticated">
         <router-link to="/auth">Войти</router-link>
@@ -35,6 +36,7 @@ export default {
   setup() {
     const router = useRouter()
     const store = useStore()
+    const countProducts = computed(() => store.getters['productsCart/getProductsCart'].length)
 
     return {
       logout: () => {
@@ -43,6 +45,7 @@ export default {
       },
       isAuthenticated: computed(() => store.getters['auth/isAuthenticated']),
       role: computed(() => store.getters['auth/getRole']),
+      countProducts
 
     }
   }

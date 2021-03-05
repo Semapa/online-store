@@ -7,7 +7,7 @@ export function useShop(){
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const categories = ref(store.getters['categories/getCategories'])
+    const categories = computed(() => store.getters['categories/getCategories'])
     const filter = ref('')
     const filterValue = reactive({product:'', category:''})
 
@@ -22,9 +22,14 @@ export function useShop(){
             return product
         }))
 
-    onMounted(() => {
-        store.dispatch('categories/loadCategoriesFromServer')
-        store.dispatch('products/loadProductsFromServer')
+    onMounted(async () => {
+        //Проверяем условие чтобы при возвращении с другой страницы не загружать заново
+        if(store.getters['categories/getCategories'].length === 0){
+            await store.dispatch('categories/loadCategoriesFromServer')
+        }
+        if(store.getters['products/getProducts'].length === 0) {
+            await store.dispatch('products/loadProductsFromServer')
+        }
     })
 
     watch(filter, name => {
@@ -44,7 +49,6 @@ export function useShop(){
     })
 
     function changeCategory(cat){
-        console.log('changeCategory', cat)
         filterValue.category = cat
     }
     function changeProduct(){

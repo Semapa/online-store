@@ -9,7 +9,7 @@
       <p class="text-center text-white">Цена: <strong>{{product.price}}</strong></p>
 
       <AppProductControl
-          :count="product.count"
+          :count="+product.count"
           :productId="product.id"
           class="text-white"
       />
