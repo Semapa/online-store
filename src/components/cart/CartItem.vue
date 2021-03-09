@@ -4,7 +4,7 @@
     <tr>
       <th>Наименование</th>
       <th>Количество</th>
-      <th>Цена (шт)</th>
+      <th>Цена</th>
     </tr>
     </thead>
     <tbody >
@@ -18,7 +18,7 @@
           {{product.count}} шт.
           <AppButton :class="'danger'" @action="reduceAmountProduct(product.id)">-</AppButton>
         </td>
-        <td>{{ currency(product.price)}}</td>
+        <td>{{ currency(product.price * product.count)}}</td>
       </template>
     </tr>
 

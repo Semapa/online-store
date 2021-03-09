@@ -8,8 +8,9 @@
         <img :src=product.img>
       </div>
       <h4 class="product-title">{{product.title}}</h4>
-      <div class="text-center" @click.stop="buy">
+      <div class="text-center" @click.stop>
         <button v-if="!isBuy(product.id)" class="btn"
+                @click="buy"
                 :data-id="product.id"
                 :data-count="product.count"
                 :data-index="idx"
@@ -18,7 +19,7 @@
         </button>
         <AppProductControl
             v-else
-            :count="countProductCart"
+            :count="countProductCart(product.id)"
             :productId="product.id"
         />
       </div>
@@ -27,7 +28,7 @@
 </template>
 
 <script>
-import {ref, computed} from 'vue'
+import {computed} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 
@@ -43,39 +44,31 @@ export default {
   setup(props) {
     const store = useStore()
     const router = useRouter()
-    let isShowControl = ref([])
     const cart = computed(() => store.getters['productsCart/getProductsCart'])
 
     function buy(e){
       console.log('buy', e.target.dataset.id)
       let currentProduct = props.products
           .filter((product) => e.target.dataset.id === product.id)
-      console.log('currentProduct', currentProduct[0])
-      store.commit('productsCart/addProductCart', currentProduct[0])
-      console.log('productsCart', cart.value)
+      console.log('currentProduct', currentProduct[0].id)
+      store.commit('productsCart/addProductCart', {
+        id: currentProduct[0].id,
+        price: currentProduct[0].price,
+        count: 1,
+        title: currentProduct[0].title
+      })
     }
 
     function isBuy(id) {
+      // console.log('isBuy cart', cart.value)
       const item = cart.value.filter((product) => product.id === id)
-      console.log('isBuy', item)
+      // console.log('isBuy', item[0])
       return item.length ? true : false
     }
 
-    function showControl(e) {
-      isShowControl.value[e.target.dataset.id] = e.target.dataset.count >0 ? true : false
-
-      if(isShowControl.value[e.target.dataset.id] === true){
-          let currentProduct = props.products[e.target.dataset.index]
-          console.log('currentProduct',currentProduct)
-          currentProduct.count = 1
-          store.commit('productsCart/addProductCart', currentProduct)
-      }
-//      return isShowControl
-    }
-    function countProductCart(){
-      const count = store.getters['productsCart/getProductsCart']
-      console.log('count', count)
-      return count
+    function countProductCart(id){
+      const item = cart.value.filter((product) => product.id === id)
+      return item[0].count
     }
 
     function openProduct(id){
@@ -83,8 +76,6 @@ export default {
     }
 
     return {
-      isShowControl,
-      showControl,
       openProduct,
       countProductCart,
       buy,

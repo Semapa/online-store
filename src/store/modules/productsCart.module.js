@@ -3,7 +3,7 @@ export default {
     state(){
 
         return {
-            productsCart: []
+            productsCart: JSON.parse(localStorage.getItem('cart')) ?? []
 
         }
     },
@@ -15,16 +15,23 @@ export default {
     mutations: {
         addProductCart(state, product) {
             state.productsCart.push(product)
+            localStorage.setItem('cart', JSON.stringify(state.productsCart))
         },
         addAmountProduct(state, payload) {
             state.productsCart.filter(product=>{
                 if(product.id === payload.id) product.count++
+                localStorage.setItem('cart', JSON.stringify(state.productsCart))
             })
         },
         reduceAmountProduct(state, payload) {
             state.productsCart.filter(product=>{
                 if(product.id === payload.id) {
                     if (product.count > 0) product.count--
+
+                    if (product.count === 0){
+                        state.productsCart = state.productsCart.filter((item) => item.id !== payload.id)
+                    }
+                    localStorage.setItem('cart', JSON.stringify(state.productsCart))
                 }
             })
         }
