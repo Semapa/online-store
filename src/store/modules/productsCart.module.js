@@ -1,9 +1,13 @@
+import store from '../index'
+
 export default {
     namespaced: true,
     state(){
 
         return {
-            productsCart: JSON.parse(localStorage.getItem('cart')) ?? []
+            productsCart: JSON.parse(localStorage.getItem('cart')) ?? [],
+
+
         }
     },
     getters: {
@@ -17,10 +21,12 @@ export default {
             localStorage.setItem('cart', JSON.stringify(state.productsCart))
         },
         addAmountProduct(state, payload) {
-            const countProduct = state.products.filter(product => product.id === payload.id)
-            console.log('countProduct', countProduct)
+            const countProduct = store.getters['products/getProducts']
+                .filter(product => product.id === payload.id)
+
+            console.log('countProduct', countProduct[0].count)
             state.productsCart.filter(product => {
-                if(product.id === payload.id) product.count++
+                if(product.id === payload.id && product.count < countProduct[0].count) product.count++
                 localStorage.setItem('cart', JSON.stringify(state.productsCart))
             })
         },
