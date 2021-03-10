@@ -47,22 +47,21 @@ export default {
     const cart = computed(() => store.getters['productsCart/getProductsCart'])
 
     function buy(e){
-      console.log('buy', e.target.dataset.id)
       let currentProduct = props.products
           .filter((product) => e.target.dataset.id === product.id)
-      console.log('currentProduct', currentProduct[0].id)
-      store.commit('productsCart/addProductCart', {
-        id: currentProduct[0].id,
-        price: currentProduct[0].price,
-        count: 1,
-        title: currentProduct[0].title
-      })
+
+      if(currentProduct[0].count > 0){
+          store.commit('productsCart/addProductCart', {
+            id: currentProduct[0].id,
+            price: currentProduct[0].price,
+            count: 1,
+            title: currentProduct[0].title
+          })
+      }
     }
 
     function isBuy(id) {
-      // console.log('isBuy cart', cart.value)
       const item = cart.value.filter((product) => product.id === id)
-      // console.log('isBuy', item[0])
       return item.length ? true : false
     }
 
