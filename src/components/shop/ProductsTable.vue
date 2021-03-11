@@ -17,9 +17,8 @@
         >
           {{product.count}}
         </button>
-        <AppProductControl
+        <app-product-control
             v-else
-            :count="countProductCart(product.id)"
             :productId="product.id"
         />
       </div>
@@ -65,10 +64,10 @@ export default {
       return item.length ? true : false
     }
 
-    function countProductCart(id){
-      const item = cart.value.filter((product) => product.id === id)
-      return item[0].count
-    }
+    // function countProductCart(id){
+    //   const item = cart.value.filter((product) => product.id === id)
+    //   return item[0].count
+    // }
 
     function openProduct(id){
       router.push(`/product/${id}`)
@@ -76,7 +75,7 @@ export default {
 
     return {
       openProduct,
-      countProductCart,
+      // countProductCart,
       buy,
       cart,
       isBuy

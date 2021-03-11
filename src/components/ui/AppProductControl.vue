@@ -1,29 +1,42 @@
 <template>
   <div class="product-controls">
-    <AppButton :class="'danger'" @action="reduceAmountProduct(productId)">-</AppButton>
-    <strong>{{count}}</strong>
-    <AppButton :class="'primary'" @action="addAmountProduct(productId)">+</AppButton>
+    <app-button :class="'danger'" @action="reduceAmountProduct(productId)">-</app-button>
+    <strong>{{countProductCart}}</strong>
+    <app-button :disabled="!isAvailable" :class="'primary'" @action="addAmountProduct(productId)">+</app-button>
   </div>
 </template>
 
 <script>
+import {computed} from 'vue'
+import {useStore} from 'vuex'
 import AppButton from '@/components/ui/AppButton'
 import {useCart} from '@/use/cart'
 export default {
   props:{
-    count: {
-      type: Number,
-      require: true
-    },
     productId: {
       type: String,
       require: true
     }
   },
-  setup(){
+  setup(props){
+    const store = useStore()
+    const product = computed(() => store.getters['products/getProducts']
+                        .filter((item) => item.id === props.productId))
+
+    const cart = computed(() => store.getters['productsCart/getProductsCart']
+                        .filter((product) => product.id === props.productId))
+
+    function getCount() {
+      return cart.value[0].count < product.value[0].count ? true : false
+    }
+    function getCountProductCart(){
+      return cart.value[0].count
+    }
 
     return {
-      ...useCart()
+      ...useCart(),
+      isAvailable: computed(getCount),
+      countProductCart: computed(getCountProductCart)
     }
   },
   components: {AppButton}
