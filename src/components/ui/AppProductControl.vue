@@ -7,6 +7,8 @@
 </template>
 
 <script>
+
+//Не могу решить проблему при перезагрузке страницы, в store не загружены products
 import {computed} from 'vue'
 import {useStore} from 'vuex'
 import AppButton from '@/components/ui/AppButton'

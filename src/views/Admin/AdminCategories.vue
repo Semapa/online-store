@@ -50,6 +50,7 @@ import AppModal from '@/components/ui/AppModal'
 import ModalCategories from '@/components/admin/ModalCategories'
 import ModalUpdCategories from '@/components/admin/ModalEditCategory'
 import Loader from '@/components/TheLoader'
+import {loadProducts} from '../../utils/loadProducts'
 
 // Не совсем понятно для чего выносить таблицу с категориями в компонент,
 // если она используется в одном месте
@@ -58,13 +59,13 @@ export default {
     const modal = ref(false)
     const modalUpd = ref(false)
     const store = useStore()
-    const loading = computed(()=> store.getters.getLoader)
+    const loading = ref(true)
     const categories = computed(() => store.getters['categories/getCategories'])
     let currentId = ''
 
-    onMounted(() => {
-      store.dispatch('categories/loadCategoriesFromServer')
-      store.dispatch('products/loadProductsFromServer')
+    onMounted(async () => {
+      await loadProducts()
+      loading.value = false
     })
 
     function createdCategory() {

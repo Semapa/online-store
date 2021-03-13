@@ -45,11 +45,7 @@ export default {
 
 
     function openProduct(e){
-      console.log(e.target.dataset.id)
-      console.log(props.products)
       currentProduct.value = props.products.filter((product) => product.id === e.target.dataset.id)
-      console.log('currentProduct', currentProduct)
-
       modal.value = true
     }
     function deleteProduct() {

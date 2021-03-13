@@ -2,11 +2,13 @@ import {ref, onMounted, watch,reactive, computed} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 import {useRoute} from 'vue-router'
+import {loadProducts} from '@/utils/loadProducts'
 
 export function useShop(){
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    const loading = ref(true)
     const categories = computed(() => store.getters['categories/getCategories'])
     const filter = ref('')
     const filterValue = reactive({product:'', category:''})
@@ -23,13 +25,8 @@ export function useShop(){
         }))
 
     onMounted(async () => {
-        //Проверяем условие чтобы при возвращении с другой страницы не загружать заново
-        if(store.getters['categories/getCategories'].length === 0){
-            await store.dispatch('categories/loadCategoriesFromServer')
-        }
-        if(store.getters['products/getProducts'].length === 0) {
-            await store.dispatch('products/loadProductsFromServer')
-        }
+        await loadProducts()
+        loading.value = false
     })
 
     watch(filter, name => {
@@ -60,6 +57,7 @@ export function useShop(){
         categories,
         filter,
         changeCategory,
-        changeProduct
+        changeProduct,
+        loading
     }
 }

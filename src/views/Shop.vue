@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import {computed} from 'vue'
-import {useStore} from 'vuex'
 import {useShop} from '@/use/shop'
 import Loader from '@/components/TheLoader'
 import ProductsFilter from '@/components/shop/ProductsFilter'
@@ -22,11 +20,8 @@ import ProductsTable from '@/components/shop/ProductsTable'
   export default {
     components:{ProductsFilter, ProductsTable, Loader},
     setup(){
-      const store = useStore()
-      const loading = computed(()=> store.getters.getLoader)
       return {
-        ...useShop(),
-        loading
+        ...useShop()
       }
     }
   }

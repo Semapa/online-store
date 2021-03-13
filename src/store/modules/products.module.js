@@ -26,9 +26,7 @@ export default {
             state.products.push(product)
         },
         sortProducts(state){
-            console.log('sortProducts - products',state.products)
             state.products.sort((a, b) => {
-            console.log('sortProducts',a.value.count, b.value.count)
             if (a.count > b.count) return -1
             if (a.count < b.count) return 1
                 //    return state.allProducts.sort((a, b) => b.count - a.count)
@@ -62,10 +60,8 @@ export default {
         // },
         async createProduct({dispatch}, payload) {
             try {
-                store.commit('setLoader', true)
                 const token = store.getters['auth/token']
                 await axiosFirebase.post(`/products.json?auth=${token}`, payload)
-                store.commit('setLoader', false)
                 dispatch('setMessage', {
                     value: 'Новый продукт успешно создан',
                     type: 'primary'
@@ -80,9 +76,7 @@ export default {
         async loadProductsFromServer({commit}){
             commit('setProducts')
             try {
-                store.commit('setLoader', true)
                 const response = await axiosFirebase.get('/products.json')
-                store.commit('setLoader', false)
                 if(response.data) {
                     const products = Object.keys(response.data).map((key) => {
                         return {

@@ -6,7 +6,7 @@
     <hr>
     <p class="text-right"><strong>Всего: {{currency(getTotal)}}</strong></p>
     <p class="text-right">
-      <button class="btn" @click="toPay">Оплатить</button>
+      <button class="btn" @click="toPay">Купить</button>
     </p>
   </div>
 </template>
@@ -15,6 +15,7 @@
 import {useCart} from '@/use/cart'
 import CartItem from '@/components/cart/CartItem'
 import {currency} from '@/utils/currency'
+
 
 export default {
 

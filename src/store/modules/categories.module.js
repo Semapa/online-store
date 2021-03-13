@@ -31,9 +31,7 @@ export default {
        async loadCategoriesFromServer({commit}){
             commit('setCategories')
             try {
-                store.commit('setLoader', true)
                 const response = await axiosFirebase.get('/categories.json')
-                store.commit('setLoader', false)
                 if(response.data) {
                     const categories = Object.keys(response.data).map((key) => {
                         return {
@@ -51,10 +49,8 @@ export default {
         },
         async createCategory({dispatch}, payload) {
             try {
-                store.commit('setLoader', true)
                 const token = store.getters['auth/token']
                 await axiosFirebase.post(`/categories.json?auth=${token}`, payload)
-                store.commit('setLoader', false)
                 dispatch('setMessage', {
                     value: 'Новая категория успешно создана',
                     type: 'primary'
@@ -68,10 +64,8 @@ export default {
         },
         async deleteCategoryFromServer({dispatch, commit}, id) {
             try {
-                store.commit('setLoader', true)
                 const token = store.getters['auth/token']
                 await axiosFirebase.delete(`/categories/${id}.json?auth=${token}`)
-                store.commit('setLoader', false)
                 dispatch('setMessage', {
                     value: 'Категория успешно удалена',
                     type: 'primary'
@@ -87,11 +81,9 @@ export default {
         },
         async updateCategoryFromServer({dispatch}, request) {
             try {
-                store.commit('setLoader', true)
                 const token = store.getters['auth/token']
                 await axiosFirebase.put(`/categories/${request.id}.json?auth=${token}`,
                     {title: request.title})
-                store.commit('setLoader', false)
                 dispatch('setMessage', {
                     value: 'Категория успешно обновлена',
                     type: 'primary'
