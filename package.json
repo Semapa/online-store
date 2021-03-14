@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "lodash.chunk": "^4.2.0",
     "register-service-worker": "^1.7.2",
     "vee-validate": "^4.1.13",
     "vue": "^3.0.0",

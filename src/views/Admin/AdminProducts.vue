@@ -7,9 +7,9 @@
       <h1 class="card-title">Продукты</h1>
       <button class="btn primary" @click="modal = true">Добавить</button>
     </div>
-    <div  v-if="products.length">
+    <div  v-if="productsPage.length">
     <products-table
-        :products="products"
+        :products="productsPage"
         :categories="categories"
     />
       <app-pagination
@@ -41,6 +41,7 @@ import ProductsTable from '@/components/admin/ProductsTable'
 import AppPagination from '@/components/ui/AppPagination'
 import Loader from '@/components/TheLoader'
 import {loadProducts} from '../../utils/loadProducts'
+import chunk from 'lodash.chunk'
 
 export default {
   setup() {
@@ -63,7 +64,7 @@ export default {
 
     watch(page, _setPage)
 
-    const productsPage = computed(() => chunk(products.value, PAGE_SIZE))
+    const productsPage = computed(() => chunk(products.value, PAGE_SIZE)[page.value - 1])
     console.log('page', productsPage)
     function createProduct() {
       modal.value = false
@@ -73,6 +74,7 @@ export default {
       categories,
       createProduct,
       products,
+      productsPage,
       PAGE_SIZE,
       page,
       loading
