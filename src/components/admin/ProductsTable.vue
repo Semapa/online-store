@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr class="item" v-for="product in products" :key="product.id">
+    <tr v-for="product in products" :key="product.id">
       <td>{{product.title}}</td>
       <td>{{product.count}}</td>
       <td>{{product.price}}</td>
@@ -68,10 +68,7 @@ export default {
 </script>
 
 <style scoped>
-.item {
-  display: flex;
-  justify-content: space-around;
-}
+
 .btn {
   font-size: 12px;
 }

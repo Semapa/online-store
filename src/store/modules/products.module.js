@@ -25,6 +25,21 @@ export default {
         addProduct(state, product) {
             state.products.push(product)
         },
+        reduceAmount(state){
+            const cart = store.getters['productsCart/getProductsCart']
+            console.log('reduceAmount', cart)
+            let products = []
+            cart.forEach((item) => {
+                products = state.products.filter((product) => {
+                    if(product.id === item.id) {
+                        product.count = product.count - (+item.count)
+                    }
+                    return product
+                })
+            })
+            state.products = products
+            console.log('newProducts', state.products)
+        },
         sortProducts(state){
             state.products.sort((a, b) => {
             if (a.count > b.count) return -1
@@ -93,4 +108,5 @@ export default {
             }
         }
     },
+
 }

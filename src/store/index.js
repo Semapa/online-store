@@ -4,7 +4,7 @@ import auth from './modules/auth.module'
 import products from './modules/products.module'
 import categories from './modules/categories.module'
 import productsCart from './modules/productsCart.module'
-
+import orders from './modules/orders.module'
 // const plugins = []
 
 // чтоб логгер работал только в режиме разработки
@@ -40,6 +40,7 @@ export default createStore({
         auth,
         products,
         productsCart,
-        categories
+        categories,
+        orders
     }
 })

@@ -6,8 +6,6 @@ export default {
 
         return {
             productsCart: JSON.parse(localStorage.getItem('cart')) ?? [],
-
-
         }
     },
     getters: {
@@ -16,6 +14,9 @@ export default {
         }
     },
     mutations: {
+        clearCart(state) {
+          state.productsCart = []
+        },
         addProductCart(state, product) {
             state.productsCart.push(product)
             localStorage.setItem('cart', JSON.stringify(state.productsCart))

@@ -19,9 +19,6 @@
       />
     </div>
     <h3 v-else>Добавьте новый продукт</h3>
-
-
-
   </div>
     <teleport to="body">
       <app-modal v-if="modal" title="Создать новый продукт" @close="modal = false">

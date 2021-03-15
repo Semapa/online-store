@@ -82,7 +82,7 @@ export default {
         async updateCategoryFromServer({dispatch}, request) {
             try {
                 const token = store.getters['auth/token']
-                await axiosFirebase.put(`/categories/${request.id}.json?auth=${token}`,
+                await axiosFirebase.patch(`/categories/${request.id}.json?auth=${token}`,
                     {title: request.title})
                 dispatch('setMessage', {
                     value: 'Категория успешно обновлена',
