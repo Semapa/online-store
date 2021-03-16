@@ -62,8 +62,9 @@ export default {
     watch(page, _setPage)
 
     const productsPage = computed(() => chunk(products.value, PAGE_SIZE)[page.value - 1])
-    console.log('page', productsPage)
-    function createProduct() {
+
+    async function createProduct() {
+      await store.dispatch('products/loadProductsFromServer')
       modal.value = false
     }
     return {

@@ -40,6 +40,10 @@ export default {
             state.products = products
             console.log('newProducts', state.products)
         },
+        deleteProduct(state, id){
+            console.log('deleteProduct',state, id)
+            state.categories = state.categories.filter((category) => category.id !== id)
+        },
         sortProducts(state){
             state.products.sort((a, b) => {
             if (a.count > b.count) return -1
@@ -106,7 +110,24 @@ export default {
             } catch(e){
                 console.log(e)
             }
-        }
-    },
+        },
+        async deleteProductFromServer({dispatch, commit}, id) {
+            try {
+                const token = store.getters['auth/token']
+                await axiosFirebase.delete(`/products/${id}.json?auth=${token}`)
+                dispatch('setMessage', {
+                    value: 'Продукт успешно удален',
+                    type: 'primary'
+                }, {root: true})
+                commit('deleteProduct', id)
+            } catch (e) {
+                dispatch('setMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+    }
+
 
 }

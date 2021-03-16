@@ -27,7 +27,6 @@ export function useCart(){
     async function toPay() {
         try {
             const token = store.getters['auth/token']
-            console.log('toPay')
             await pay({
                 description:'Покупка товара в онлайн магазине',
                 amount: getTotal(),

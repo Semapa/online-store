@@ -34,6 +34,7 @@
     </div>
 
     <button class="button btn primary" :disabled="isSubmitting">Изменить</button>
+
   </form>
 </template>
 
@@ -84,10 +85,7 @@ export default {
     )
 
     const onSubmit =  handleSubmit( async (values)=> {
-      console.log('onSubmit', values)
-      console.log('props.product.title', props.product.title)
-      emit('edit', values)
-      // await store.dispatch('products/createProduct', values)
+      emit('edit', props.product.id, values)
     })
 
     onMounted(() => {
