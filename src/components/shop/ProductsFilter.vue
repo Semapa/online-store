@@ -14,7 +14,7 @@
       <li class="list-item"
           v-for="(category, idx) in categories"
           :key="idx"
-          @click="changeCategory(category.type)"
+          @click="changeCategory(category.id)"
       >
         {{ category.title }}
       </li>
@@ -32,7 +32,7 @@ export default {
       type: Object,
       required: true,
     },
-    modeValue:{}
+    modelValue:{}
   },
   setup(_, {emit}) {
     const filterValue = ref()
@@ -44,6 +44,7 @@ export default {
     })
 
     function changeCategory(cat){
+      // console.log(cat)
       emit('change-category', cat)
     }
     function changeProductName(){

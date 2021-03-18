@@ -48,6 +48,10 @@ export function useLoginForm() {
         }
     })
 
+    const onRegister = () => {
+        console.log('onRegister')
+    }
+
 
     return {
         email,
@@ -58,6 +62,7 @@ export function useLoginForm() {
         pBlur,
         onSubmit,
         isSubmitting, // для отключения кнопки Войти, если форма сабмитится в данный момент
-        isTooManyAttempts
+        isTooManyAttempts,
+        onRegister
     }
 }

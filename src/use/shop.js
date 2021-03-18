@@ -30,11 +30,9 @@ export function useShop(){
     })
 
     watch(filter, name => {
-        console.log('val', name.filterValue)
         filterValue.product = name.filterValue
     })
     watch(filterValue, value => {
-        console.log('filterValue', value.category,value.product)
         router.replace({
             path: '/',
             query: {

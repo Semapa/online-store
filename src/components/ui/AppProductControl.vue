@@ -7,8 +7,6 @@
 </template>
 
 <script>
-
-//Не могу решить проблему при перезагрузке страницы, в store не загружены products
 import {computed} from 'vue'
 import {useStore} from 'vuex'
 import AppButton from '@/components/ui/AppButton'
@@ -18,7 +16,7 @@ export default {
     productId: {
       type: String,
       require: true
-    }
+    },
   },
   setup(props){
     const store = useStore()
@@ -27,18 +25,22 @@ export default {
 
     const cart = computed(() => store.getters['productsCart/getProductsCart']
                         .filter((product) => product.id === props.productId))
-
+                        
     function getCount() {
-      return cart.value[0].count < product.value[0].count ? true : false
+      if(cart.value[0])
+        return cart.value[0].count < product.value[0].count ? true : false
+      else return true
     }
     function getCountProductCart(){
-      return cart.value[0].count
+      if(cart.value[0])
+        return cart.value[0].count
+      else return 0  
     }
 
     return {
       ...useCart(),
       isAvailable: computed(getCount),
-      countProductCart: computed(getCountProductCart)
+      countProductCart: computed(getCountProductCart),
     }
   },
   components: {AppButton}

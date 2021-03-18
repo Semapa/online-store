@@ -15,7 +15,7 @@
                 :data-count="product.count"
                 :data-index="idx"
         >
-          {{product.count}}
+          {{currency(product.price)}}
         </button>
         <app-product-control
             v-else
@@ -30,9 +30,9 @@
 import {computed} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
-
-
+import {currency} from '@/utils/currency'
 import AppProductControl from '@/components/ui/AppProductControl'
+
 export default {
   props: {
     products: {
@@ -64,18 +64,13 @@ export default {
       return item.length ? true : false
     }
 
-    // function countProductCart(id){
-    //   const item = cart.value.filter((product) => product.id === id)
-    //   return item[0].count
-    // }
-
     function openProduct(id){
       router.push(`/product/${id}`)
     }
 
     return {
       openProduct,
-      // countProductCart,
+      currency,
       buy,
       cart,
       isBuy
